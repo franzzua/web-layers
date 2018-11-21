@@ -35,7 +35,7 @@ module.exports = env => ({
     },
     resolve: {
         extensions: ['.ts', '.js', '.html', '.json'],
-        mainFields: ['module', 'main'],
+        mainFields: ['main', 'module', 'main'],
         alias: {
             // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js')
             'reflect-metadata': 'core-js/es7/reflect.js'

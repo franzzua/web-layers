@@ -1,6 +1,6 @@
 import HyperHTMLElement from "hyperhtml-element";
 import {scan, startWith, tap, Observable, ReplaySubject, Subject} from "../rx";
-import {Container, Injectable} from "@decorators/di";
+import {Container} from "@decorators/di";
 import {Reflector} from "@decorators/di/src/reflector";
 
 export function Component(info: {
@@ -18,40 +18,48 @@ export function Component(info: {
             static booleanAttributes = info.booleanAttributes || [];
             private component: ComponentExtended<any>;
             private _id = Id++;
+            handlerProxy: any;
+
+            renderState(state){
+                const strs = [];
+                let raw = '';
+                const vals = [];
+                const html = (strings, ...values) => {
+                    raw += strings.raw;
+                    if (strs.length){
+                        strs.push(strs.pop() + strings[0]);
+                        strs.push(...strings.slice(1));
+                    }else {
+                        strs.push(...strings);
+                    }
+                    vals.push(...values);
+                };
+                info.template(html, state, this.handlerProxy);
+                console.log(strs);
+                console.log(vals);
+                if (typeof info.style === "function") {
+                    info.style(html, state);
+                }else {
+                    html`${info.style}`;
+                }
+                console.log(strs);
+                console.log(vals);
+                strs['raw'] = raw;
+                this.html(strs as any, ...vals);
+            }
 
             created() {
                 const dependencies = Reflector.paramTypes(target).map(type => Container.get(type));
                 this.component = new target(...dependencies);
                 this.component['id'] = this._id;
-                const handlerProxy = new Proxy({}, {
+                this.handlerProxy = new Proxy({}, {
                     get: (target, key) => this.dispatchEvents(key)
                 });
-                const render = state => {
-
-                    const strs = [] as any;
-                    let raw = '';
-                    const vals = [];
-                    const html = (strings, ...values) => {
-                        raw += strings.raw;
-                        strs.push(...strings);
-                        vals.push(...values);
-                    };
-                    info.template(html, state, handlerProxy);
-                    if (typeof info.style === "function") {
-                        info.style(html, state);
-                    }else {
-                        html`${info.style}`;
-                    }
-                    console.log(vals);
-                    strs.raw = raw;
-                    this.html(strs, ...vals);
-                };
                 this.component.State$.subscribe(state => {
-                    render(state);
+                    this.renderState(state);
                 });
                 this.component.Actions$.subscribe();
                 this.component.created();
-                render(this.component.defaultState || {});
             }
 
             dispatchEvents = type => (event: Event) => this.component._eventsSubject$.next({

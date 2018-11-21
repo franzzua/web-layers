@@ -1,6 +1,6 @@
-import {Component, HyperComponent} from "../framework/component";
-import {AppStore} from "../app/store/app.store";
-import {combineLatest, filter, map, tap} from "../rx";
+import {Component, HyperComponent} from "../../framework/component";
+import {AppStore} from "../../app/store/app.store";
+import {combineLatest, filter, map, tap} from "../../rx";
 
 @Component({
     name: 'simple-div',

@@ -1,6 +1,6 @@
 import {Injectable} from "@decorators/di";
 import {AppRootStore} from "../framework/app-root-store";
-import '../ui/simple-element';
+import '../ui/simple-element/simple-element';
 
 @Injectable()
 export class Application {
