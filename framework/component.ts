@@ -1,13 +1,16 @@
 import HyperHTMLElement from "hyperhtml-element";
-import {scan, startWith, tap, Observable, ReplaySubject, Subject} from "../rxjs";
+import {scan, startWith, tap, Observable, ReplaySubject, Subject} from "../rx";
 import {Container, Injectable} from "@decorators/di";
 import {Reflector} from "@decorators/di/src/reflector";
 
-export function component(info: {
+export function Component(info: {
     name: string,
     observedAttributes?: string[],
     booleanAttributes?: string[],
+    template: Function,
+    style: Function
 }, options?: ElementDefinitionOptions) {
+    console.log(info.style);
     return (target) => {
         let Id = 0;
         const elementConstructor = class extends HyperHTMLElement {
@@ -23,12 +26,32 @@ export function component(info: {
                 const handlerProxy = new Proxy({}, {
                     get: (target, key) => this.dispatchEvents(key)
                 });
-                console.log(handlerProxy['active']);
+                const render = state => {
+
+                    const strs = [] as any;
+                    let raw = '';
+                    const vals = [];
+                    const html = (strings, ...values) => {
+                        raw += strings.raw;
+                        strs.push(...strings);
+                        vals.push(...values);
+                    };
+                    info.template(html, state, handlerProxy);
+                    if (typeof info.style === "function") {
+                        info.style(html, state);
+                    }else {
+                        html`${info.style}`;
+                    }
+                    console.log(vals);
+                    strs.raw = raw;
+                    this.html(strs, ...vals);
+                };
                 this.component.State$.subscribe(state => {
-                    this.component.Render(this.html.bind(this), state, handlerProxy);
+                    render(state);
                 });
                 this.component.Actions$.subscribe();
                 this.component.created();
+                render(this.component.defaultState || {});
             }
 
             dispatchEvents = type => (event: Event) => this.component._eventsSubject$.next({
@@ -50,6 +73,7 @@ interface ComponentExtended<TState> {
 
     State$: Observable<TState>;
     Actions$: Observable<{ type: string; payload?: any }>;
+    defaultState: TState;
 
     Render(html, state: TState, events);
 
@@ -60,17 +84,17 @@ export type IEventHandler<TEvents> = {
     [K in keyof TEvents]: (Event) => void
 };
 
-export abstract class Component<TState, TEvents> {
+export abstract class HyperComponent<TState = any, TEvents = any> {
 
     abstract State$: Observable<TState>;
     abstract Actions$: Observable<{ type: string; payload?: any }>;
 
-    abstract Render(html, state: TState, events: IEventHandler<TEvents>);
+    // abstract Render(html, state: TState, events: IEventHandler<TEvents>);
 
     created() {
 
     }
-
+    protected defaultState: TState;
     private _attributesSubject$ = new ReplaySubject<{ name, value }>();
     private _eventsSubject$ = new ReplaySubject<{ event: Event; type: keyof TEvents; }>();
     protected Events$ = this._eventsSubject$.asObservable();

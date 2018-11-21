@@ -1,13 +1,15 @@
-import {component, Component, IEventHandler} from "../framework/component";
+import {Component, HyperComponent} from "../framework/component";
 import {AppStore} from "../app/store/app.store";
-import {combineLatest, filter, interval, map, startWith, tap} from "../rxjs";
+import {combineLatest, filter, map, tap} from "../rx";
 
-@component({
+@Component({
     name: 'simple-div',
     observedAttributes: ['name'],
     booleanAttributes: ['active'],
+    template: require("./simple-element.tsx"),
+    style: require('./simple-element.less')
 })
-export class SimpleElement extends Component<IState, IEvents> {
+export class SimpleElement extends HyperComponent<IState, IEvents> {
 
     constructor(private appStore: AppStore) {
         super();
@@ -22,15 +24,6 @@ export class SimpleElement extends Component<IState, IEvents> {
             name, active: isActive
         })),
     );
-
-    public Render(html, state: IState, events: IEventHandler<IEvents>) {
-        return html`
-            <div>Hello ${state.name} is ${state.active}</div>
-            <input type="checkbox" 
-                   checked="${state.active ? 'checked' : ''}" 
-                   onchange="${events.active}">
-        `;
-    }
 
     public Actions$ = this.Events$.pipe(
         filter(e => e.type === 'active'),

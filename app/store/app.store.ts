@@ -1,9 +1,8 @@
-import {ObservableStore} from 'store-rxjs/dist';
+import {ObservableStore} from 'store-rxjs';
 import {AppRootStore} from "../../framework/app-root-store";
 import {AppActions} from "./app.actions";
 import {Injectable} from "@decorators/di";
-import {filter, map} from "../../rxjs";
-import {Fn} from "store-rxjs/dist/Fn";
+import {filter, map} from "../../rx";
 
 @Injectable()
 export class AppStore extends ObservableStore<any> {
@@ -14,7 +13,7 @@ export class AppStore extends ObservableStore<any> {
     public Actions = new AppActions();
 
     public IsActive$ = this.asObservable().pipe(
-        filter(Fn.Ib),
+        filter(x => !!x),
         map(a => a.active)
     )
 }

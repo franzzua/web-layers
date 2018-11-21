@@ -14,7 +14,7 @@
       "dom"
     ],
     "paths": {
-      "store-rxjs/dist": ["../store-rxjs/"]
+//      "store-rxjs": ["../store-rxjs/dist/main"]
     }
   }
 }
