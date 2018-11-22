@@ -6,6 +6,7 @@ module.exports = env => ({
     output: {
         path: require('path').join(__dirname, '../dist')
     },
+    devtool: 'source-map',
     mode: env.prod ? 'production' : 'development',
     module: {
         rules: [
@@ -37,17 +38,22 @@ module.exports = env => ({
         extensions: ['.ts', '.js', '.html', '.json'],
         mainFields: ['main', 'module', 'main'],
         alias: {
-            // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js')
-            'reflect-metadata': 'core-js/es7/reflect.js'
+            // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js'),
+            // 'rxjs': require('path').join(__dirname, '../node_modules/rxjs'),
+            '@decorators/di': require('path').join(__dirname, '../framework/di.ts'),
+            'di': require('path').join(__dirname, '../framework/di.ts'),
+            // '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',
+            // '@gm/isomorphic-core': 'A:/web/isomorphic/core/dist/main.js'
         }
     },
+    externals: [],
     plugins: [
         new HtmlWebpackPlugin({
             template: './entry/index.html'
         }),
         new TsConfigPathsPlugin({configFile: "./configs/tsconfig.json"}),
-        // new BundleAnalyzerPlugin({
-        //     analyzerPort: 9999
-        // })
+        new BundleAnalyzerPlugin({
+            analyzerPort: 9995
+        })
     ]
 });

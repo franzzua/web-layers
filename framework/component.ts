@@ -1,7 +1,7 @@
 import HyperHTMLElement from "hyperhtml-element";
-import {scan, startWith, tap, Observable, ReplaySubject, Subject} from "../rx";
+import {scan, startWith, tap, Observable, ReplaySubject, Subject, NEVER, of} from "../rx";
 import {Container} from "@decorators/di";
-import {Reflector} from "@decorators/di/src/reflector";
+import {Reflector} from "di";
 
 export function Component(info: {
     name: string,
@@ -20,30 +20,30 @@ export function Component(info: {
             private _id = Id++;
             handlerProxy: any;
 
-            renderState(state){
+            renderState(state) {
                 const strs = [];
                 let raw = '';
                 const vals = [];
                 const html = (strings, ...values) => {
                     raw += strings.raw;
-                    if (strs.length){
+                    if (strs.length) {
                         strs.push(strs.pop() + strings[0]);
                         strs.push(...strings.slice(1));
-                    }else {
+                    } else {
                         strs.push(...strings);
                     }
                     vals.push(...values);
                 };
                 info.template(html, state, this.handlerProxy);
-                console.log(strs);
-                console.log(vals);
+                // console.log(strs);
+                // console.log(vals);
                 if (typeof info.style === "function") {
                     info.style(html, state);
-                }else {
+                } else {
                     html`${info.style}`;
                 }
-                console.log(strs);
-                console.log(vals);
+                // console.log(strs);
+                // console.log(vals);
                 strs['raw'] = raw;
                 this.html(strs as any, ...vals);
             }
@@ -94,14 +94,15 @@ export type IEventHandler<TEvents> = {
 
 export abstract class HyperComponent<TState = any, TEvents = any> {
 
-    abstract State$: Observable<TState>;
-    abstract Actions$: Observable<{ type: string; payload?: any }>;
+    State$: Observable<TState> = of(null);
+    Actions$: Observable<{ type: string; payload?: any }> = NEVER;
 
     // abstract Render(html, state: TState, events: IEventHandler<TEvents>);
 
     created() {
 
     }
+
     protected defaultState: TState;
     private _attributesSubject$ = new ReplaySubject<{ name, value }>();
     private _eventsSubject$ = new ReplaySubject<{ event: Event; type: keyof TEvents; }>();

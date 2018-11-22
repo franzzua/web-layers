@@ -1,21 +1,27 @@
-import {ObservableStore} from 'store-rxjs';
+import {ObservableStore, RootStore} from 'store-rxjs';
 import {AppRootStore} from "../../framework/app-root-store";
-import {AppActions} from "./app.actions";
+import {AppActionsCreator} from "./app-actions.creator";
 import {Injectable} from "@decorators/di";
 import {filter, map} from "../../rx";
+import {AppReducer} from "./app.reducer";
 
 @Injectable()
 export class AppStore extends ObservableStore<any> {
-    constructor(root: AppRootStore) {
+    constructor(root: RootStore) {
         super(root, 'app');
     }
 
-    public Actions = new AppActions();
+    public Actions = new AppActionsCreator();
 
-    public IsActive$ = this.asObservable().pipe(
+    public State$ = this.asObservable().pipe(
         filter(x => !!x),
-        map(a => a.active)
     )
+
+    public Init() {
+        super.Init({active: false, items: [1, 2, 3]})
+    }
+
+    protected reducer = new AppReducer();
 }
 
 // Container.provide([{provide: RootStore, useClass: AppRootStore}]);

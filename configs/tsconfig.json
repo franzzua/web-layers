@@ -14,7 +14,10 @@
       "dom"
     ],
     "paths": {
-//      "store-rxjs": ["../store-rxjs/dist/main"]
+      "di": "./framework/di",
+      "@gm/isomorphic-core": ["A:/web/isomorphic/core"],
+      "@gm/isomorphic-domain": ["A:/web/isomorphic/domain"]
+//      "free-rxjs": ["../free-rxjs/dist/main"]
     }
   }
 }

@@ -1,6 +1,6 @@
 import {Component, HyperComponent} from "../../framework/component";
 import {AppStore} from "../../app/store/app.store";
-import {combineLatest, filter, map, tap} from "../../rx";
+import {combineLatest, filter, map, tap, merge} from "../../rx";
 
 @Component({
     name: 'simple-div',
@@ -19,24 +19,36 @@ export class SimpleElement extends HyperComponent<IState, IEvents> {
         map(a => a.name as string)
     );
 
-    public State$ = combineLatest(this.Name$, this.appStore.IsActive$).pipe(
-        map(([name, isActive]) => ({
-            name, active: isActive
+    public State$ = combineLatest(this.Name$, this.appStore.State$).pipe(
+        map(([name, state]) => ({
+            name, ...state
         })),
     );
 
-    public Actions$ = this.Events$.pipe(
-        filter(e => e.type === 'active'),
-        tap(console.log),
-        tap(a => this.appStore.Actions.ChangeActive(a.event.target.checked)),
-    );
+    private Actions = {
+        active: this.Events$.pipe(
+            filter(e => e.type === 'active'),
+            tap(a => this.appStore.Actions.ChangeActive(a.event.target['checked'])),
+        ),
+        remove: this.Events$.pipe(
+            filter(e => e.type === 'increment'),
+            tap(a => this.appStore.Actions.IncrementItem(a.event)),
+        ),
+    };
+
+    public Actions$ = merge(
+        this.Actions.active,
+        this.Actions.remove
+    )
 }
 
 export interface IEvents {
     active;
+    increment;
 }
 
 export interface IState {
     active: boolean;
     name: string;
+    items: string[];
 }
