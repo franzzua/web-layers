@@ -1,7 +1,6 @@
 import HyperHTMLElement from "hyperhtml-element";
 import {scan, startWith, tap, Observable, ReplaySubject, Subject, NEVER, of} from "../rx";
 import {Container} from "@decorators/di";
-import {Reflector} from "di";
 
 export function Component(info: {
     name: string,
@@ -13,6 +12,7 @@ export function Component(info: {
     console.log(info.style);
     return (target) => {
         let Id = 0;
+        let defined = false;
         const elementConstructor = class extends HyperHTMLElement {
             static observedAttributes = info.observedAttributes || [];
             static booleanAttributes = info.booleanAttributes || [];
@@ -49,8 +49,10 @@ export function Component(info: {
             }
 
             created() {
-                const dependencies = Reflector.paramTypes(target).map(type => Container.get(type));
-                this.component = new target(...dependencies);
+                if (!defined)
+                    return;
+                // const dependencies = Reflector.paramTypes(target).map(type => Container.get(type));
+                this.component = Container.get(target);//new target(...dependencies);
                 this.component['id'] = this._id;
                 this.handlerProxy = new Proxy({}, {
                     get: (target, key) => this.dispatchEvents(key)
@@ -71,7 +73,10 @@ export function Component(info: {
                 this.component._attributesSubject$.next({name, value: curr});
             }
         };
-        elementConstructor.define(info.name, options);
+        window.addEventListener('load', ()=>{
+            elementConstructor.define(info.name, options);
+        });
+        defined = true;
     }
 }
 

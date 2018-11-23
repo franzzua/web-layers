@@ -6,7 +6,7 @@ module.exports = env => ({
     output: {
         path: require('path').join(__dirname, '../dist')
     },
-    devtool: 'source-map',
+    devtool: env.prod ? false : 'source-map',
     mode: env.prod ? 'production' : 'development',
     module: {
         rules: [
@@ -42,8 +42,8 @@ module.exports = env => ({
             // 'rxjs': require('path').join(__dirname, '../node_modules/rxjs'),
             '@decorators/di': require('path').join(__dirname, '../framework/di.ts'),
             'di': require('path').join(__dirname, '../framework/di.ts'),
-            // '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',
-            // '@gm/isomorphic-core': 'A:/web/isomorphic/core/dist/main.js'
+            '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',
+            '@gm/isomorphic-core': 'A:/web/isomorphic/core/dist/main.js'
         }
     },
     externals: [],
@@ -52,8 +52,8 @@ module.exports = env => ({
             template: './entry/index.html'
         }),
         new TsConfigPathsPlugin({configFile: "./configs/tsconfig.json"}),
-        new BundleAnalyzerPlugin({
-            analyzerPort: 9995
-        })
+        // new BundleAnalyzerPlugin({
+        //     analyzerPort: 9995
+        // })
     ]
 });

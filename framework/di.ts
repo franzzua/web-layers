@@ -2,22 +2,48 @@ import {Type} from "typescript";
 
 const Store: Provider[] = [];
 
-export interface Provider {
-    provide: Type;
-    useClass?: any;
+export type Provider = ValueProvider | ClassProvider | FactoryProvider
+
+export interface ValueProvider {
+    provide: any;
     useValue?: any;
-    instance?: any;
-    deps: Provider[];
 }
 
-function resolve(provider: Provider) {
+export interface ClassProvider {
+    provide: Type;
+    useClass?: any;
+    deps: Provider[];
+    multiple?: boolean;
+}
+
+export interface FactoryProvider {
+    provide: Type;
+    useFactory?: any;
+    deps: Provider[];
+    multiple?: boolean;
+}
+
+type CommonProvider = ValueProvider & ClassProvider & FactoryProvider;
+
+function resolve(provider: CommonProvider) {
     if (provider.useValue)
         return provider.useValue;
-    if (provider.useClass){
-        const deps = provider.deps.map(Container.get);
-        return provider.useValue = new provider.useClass(...deps);
+    if (!provider.useClass) {
+        provider.useClass = provider.provide;
     }
-    throw new Error('neew useClass or useValue')
+    if (provider.useClass) {
+        if (!provider.deps){
+            console.warn('no deps in provider', provider.provide, provider.useClass);
+            provider.deps = [];
+        }
+        const deps = provider.deps.map(Container.get);
+        const instance = new provider.useClass(...deps);
+        if (!provider.multiple) {
+            provider.useValue = instance;
+        }
+        return instance;
+    }
+    throw new Error('need useClass or useValue')
 }
 
 function register(provider: Provider): Provider {
@@ -27,13 +53,13 @@ function register(provider: Provider): Provider {
 
 
 export const Container = {
-    get: target => {
+    get<T>(target): T {
         let existing = Store.find(p => p.provide == target);
         if (!existing) {
             console.warn('should register', target);
             existing = register({provide: target, useClass: target, deps: []});
         }
-        return resolve(existing);
+        return resolve(existing as CommonProvider);
     },
     provide(providers: Provider[]) {
         providers.forEach(p => Store.push(p));

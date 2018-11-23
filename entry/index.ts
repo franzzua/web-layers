@@ -1,5 +1,5 @@
-import {Container} from "@decorators/di";
 import {Application} from "../app/application";
-import '../ui';
+import {AppContainer} from "../app/container";
 
-Container.get<Application>(Application).Start();
+
+AppContainer.get<Application>(Application).Start();
