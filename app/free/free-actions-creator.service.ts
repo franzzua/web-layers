@@ -1,9 +1,6 @@
 import {IFreeState} from "./free.state";
 import {ActionsCreator} from "store-rxjs";
-import {Injectable} from "@decorators/di";
 
-
-@Injectable()
 export class FreeActionsCreator extends ActionsCreator<IFreeState> {
 
 

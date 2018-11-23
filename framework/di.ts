@@ -54,7 +54,7 @@ function register(provider: Provider): Provider {
 
 export const Container = {
     get<T>(target): T {
-        let existing = Store.find(p => p.provide == target);
+        let existing = Store.filter(p => p.provide == target).pop();
         if (!existing) {
             console.warn('should register', target);
             existing = register({provide: target, useClass: target, deps: []});
@@ -66,12 +66,13 @@ export const Container = {
     }
 };
 
-export function Injectable() {
+export function Injectable({deps, multiple}: {deps?: any[], multiple?} = {deps: [], multiple: false}) {
     return target => {
         // register({
         //     provide: target,
         //     useClass: target,
-        //     deps: []
+        //     deps: deps,
+        //     multiple: multiple
         // });
         return target;
     };

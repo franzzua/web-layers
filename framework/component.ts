@@ -9,7 +9,7 @@ export function Component(info: {
     template: Function,
     style: Function
 }, options?: ElementDefinitionOptions) {
-    console.log(info.style);
+    // console.log(info.style);
     return (target) => {
         let Id = 0;
         let defined = false;
@@ -64,12 +64,13 @@ export function Component(info: {
                 this.component.created();
             }
 
-            dispatchEvents = type => (event: Event) => this.component._eventsSubject$.next({
-                event: event,
+            dispatchEvents = type => (...args: any) => this.component._eventsSubject$.next({
+                args: args,
                 type: type
             });
 
             attributeChangedCallback(name: string, prev: string, curr: string) {
+                console.log(name, prev, curr)
                 this.component._attributesSubject$.next({name, value: curr});
             }
         };
@@ -82,7 +83,7 @@ export function Component(info: {
 
 interface ComponentExtended<TState> {
     _attributesSubject$: Subject<{ name, value }>;
-    _eventsSubject$: Subject<{ event: Event; type: string }>;
+    _eventsSubject$: Subject<{ args: any[]; type: string }>;
 
     State$: Observable<TState>;
     Actions$: Observable<{ type: string; payload?: any }>;
@@ -110,9 +111,10 @@ export abstract class HyperComponent<TState = any, TEvents = any> {
 
     protected defaultState: TState;
     private _attributesSubject$ = new ReplaySubject<{ name, value }>();
-    private _eventsSubject$ = new ReplaySubject<{ event: Event; type: keyof TEvents; }>();
+    private _eventsSubject$ = new ReplaySubject<{ args: any[]; type: keyof TEvents; }>();
     protected Events$ = this._eventsSubject$.asObservable();
     protected Attributes$ = this._attributesSubject$.asObservable().pipe(
+        tap(console.log),
         scan<{ name, value }, any>((acc, val) => ({...acc, [val.name]: val.value}), {}),
         startWith({}),
         tap(console.log),
