@@ -1,4 +1,4 @@
-import {Component, HyperComponent} from "../../framework/component";
+import {Component, HyperComponent} from "@so/ui";
 import {AppStore} from "../../app/store/app.store";
 import {combineLatest, filter, map, tap, merge} from "../../rx";
 

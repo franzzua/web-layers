@@ -1,7 +1,7 @@
 import {ObservableStore, RootStore} from 'store-rxjs';
 import {AppRootStore} from "../../framework/app-root-store";
 import {AppActionsCreator} from "./app-actions.creator";
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 import {filter, map} from "../../rx";
 import {AppReducer} from "./app.reducer";
 

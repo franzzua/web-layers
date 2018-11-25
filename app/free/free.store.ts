@@ -8,7 +8,7 @@ import {FreeEpic} from "./free.epic";
 import {distinctUntilChanged, map} from "rxjs/operators";
 import {Level} from "@gm/isomorphic-domain";
 import {ObservableStore} from "store-rxjs";
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 import {SlideStore} from "../slide/slide.store";
 
 @Injectable()

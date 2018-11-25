@@ -1,5 +1,5 @@
 import {Domain, ISlideState} from "@gm/isomorphic-domain";
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 import {ObservableStore, RootStore} from "store-rxjs";
 
 @Injectable()

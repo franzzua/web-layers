@@ -1,8 +1,8 @@
-import {Component, HyperComponent} from "../../../framework/component";
+import {Component, HyperComponent} from "@so/ui";
 import {FreeStore} from "../../../app/free/free.store";
 import {Domain} from "@gm/isomorphic-domain";
 import {SlideStore} from "../../../app/slide/slide.store";
-import {Injectable} from "../../../framework/di";
+import {Injectable} from "@so/di";
 import {of} from "rxjs";
 
 @Injectable({

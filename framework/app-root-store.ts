@@ -1,4 +1,4 @@
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 import {DevToolEnhancer, Store, RootStore} from "store-rxjs";
 import {StoreEnhancer} from "redux";
 

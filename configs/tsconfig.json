@@ -22,6 +22,12 @@
       ],
       "@gm/isomorphic-domain": [
         "A:/web/isomorphic/domain"
+      ],
+      "@so/di": [
+        "A:/so/di"
+      ],
+      "@so/ui": [
+        "A:/so/ui"
       ]
       //      "free-rxjs": ["../free-rxjs/dist/main"]
     }

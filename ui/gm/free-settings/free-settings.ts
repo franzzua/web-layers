@@ -1,4 +1,4 @@
-import {Component, HyperComponent} from "../../../framework/component";
+import {Component, HyperComponent} from "@so/ui";
 import {FreeStore} from "../../../app/free/free.store";
 import {IFreeState} from "../../../app/free/free.state";
 import {FreeActionsCreator} from "../../../app/free/free-actions-creator.service";

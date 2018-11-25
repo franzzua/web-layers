@@ -1,6 +1,6 @@
 import {FreeActions} from "./free-actions-creator.service";
 import {map, mapTo,  tap, withLatestFrom} from "rxjs/operators";
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 import {ActionsObservable, combineEpics, Epic, ofType} from "store-rxjs";
 import {SlideStore} from "../slide/slide.store";
 import {Domain} from "@gm/isomorphic-domain";

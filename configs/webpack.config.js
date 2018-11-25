@@ -40,10 +40,10 @@ module.exports = env => ({
         alias: {
             // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js'),
             // 'rxjs': require('path').join(__dirname, '../node_modules/rxjs'),
-            '@decorators/di': require('path').join(__dirname, '../framework/di.ts'),
-            'di': require('path').join(__dirname, '../framework/di.ts'),
-            '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',
-            '@gm/isomorphic-core': 'A:/web/isomorphic/core/dist/main.js'
+            '@so/di': 'A:/so/di',
+            '@so/ui': 'A:/so/ui',
+            // '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',
+            // '@gm/isomorphic-core': 'A:/web/isomorphic/core/dist/main.js'
         }
     },
     externals: [],

@@ -6,7 +6,7 @@ import {SlideStore} from './slide.store';
 import {Domain, ISlideState as SlideState} from '@gm/isomorphic-domain';
 import {Observable} from "rxjs";
 import {Fn} from "@gm/isomorphic-core";
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 import {combineEpics, Epic} from "store-rxjs";
 
 @Injectable()

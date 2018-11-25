@@ -1,4 +1,4 @@
-import {Component, HyperComponent} from "../../framework/component";
+import {Component, HyperComponent} from "@so/ui";
 
 @Component({
     name: 'app-root',

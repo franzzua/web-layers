@@ -1,8 +1,10 @@
-import {IMapState, ISlideState} from "@gm/isomorphic-domain";
+import {IMapState} from "@gm/isomorphic-domain";
 import {wire} from "hyperhtml"
+import {IMapComponentState} from "./map.component";
 
-module.exports = (html, state: IMapState, events) => html`
+module.exports = (html, state: IMapComponentState, events) => html`
     ${state && state.Layers && state.Layers.map(layer => wire()`
-        ${layer.Id}
+        <gm-layer id="${layer.Id}" map="${state.MapId}" slide="${state.SlideId}"
+                style="${`z-index: ${layer.Order}`}"></gm-layer>
     `) || ''}
 `;

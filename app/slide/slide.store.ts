@@ -8,7 +8,7 @@ import {Domain, IMapState, ISlideState, ILayer} from "@gm/isomorphic-domain";
 import {Fn} from "@gm/isomorphic-core";
 import {DomainStore} from "./domain.store";
 import {ObservableStore, RootStore} from "store-rxjs";
-import {Injectable} from "@decorators/di";
+import {Injectable} from "@so/di";
 
 @Injectable()
 export class SlideStore extends ObservableStore<ICurrentState> {
@@ -65,7 +65,7 @@ export class SlideStore extends ObservableStore<ICurrentState> {
         distinctUntilChanged(),
     );
 
-    GetMap$(id: any, slideId: number) {
+    GetMap$(id: any, slideId: number): Observable<IMapState> {
         return this.domain.State$.pipe(
             map(slides => slides.find(s => s.Id == slideId)),
             map(slide => slide.Maps.find(m => m.Id == id))
