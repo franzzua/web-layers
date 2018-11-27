@@ -14,14 +14,14 @@
       "dom"
     ],
     "paths": {
-      "di": [
-        "./framework/di.ts"
-      ],
-      "@gm/isomorphic-core": [
-        "A:/web/isomorphic/core"
-      ],
-      "@gm/isomorphic-domain": [
-        "A:/web/isomorphic/domain"
+//      "@gm/isomorphic-core": [
+//        "A:/web/isomorphic/core"
+//      ],
+//      "@gm/isomorphic-domain": [
+//        "A:/web/isomorphic/domain"
+//      ],
+      "rx": [
+        "./rx.ts"
       ],
       "@so/di": [
         "A:/so/di"

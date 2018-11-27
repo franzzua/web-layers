@@ -1,14 +1,16 @@
 import {RootStore} from "store-rxjs";
 import {Container} from "@so/di";
-import {init} from "@so/ui";
+import {RegisterUI} from "../ui";
 
 export class Application {
-    constructor(root: RootStore, container: Container) {
-        root.createStore();
-        init(container);
+    constructor(private root: RootStore,
+                private container: Container) {
     }
 
     Start() {
+
+        this.root.createStore();
+        RegisterUI(this.container);
     }
 
     Stop() {

@@ -1,19 +1,11 @@
 import {Injectable} from "@so/di";
-import {DevToolEnhancer, Store, RootStore} from "store-rxjs";
-import {StoreEnhancer} from "redux";
+import {Store, RootStore} from "store-rxjs";
 
-const reduxDevToolsExtension = require('redux-devtools-extension');
-
-class DevToolEnhancerRedux extends DevToolEnhancer {
-    public Enhance(storeEnhancer: StoreEnhancer<{}, {}>) {
-        return reduxDevToolsExtension.composeWithDevTools(storeEnhancer);
-    }
-}
 
 @Injectable()
 export class AppRootStore extends RootStore {
     constructor() {
-        super(new Store(), new DevToolEnhancerRedux());
+        super(new Store(), true);
     }
 
 }

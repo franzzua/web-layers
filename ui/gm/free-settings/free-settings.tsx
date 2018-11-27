@@ -1,39 +1,53 @@
 import {wire} from "hyperhtml";
-import {IFreeState} from "../../../app/free/free.state";
-import {FreeActionsCreator} from "../../../app/free/free-actions-creator.service";
+import {FreeActionsCreator} from "../../../app/stores/free/free-actions-creator.service";
+import {IFreeSettingsSpace} from "./free-settings";
+import {Level} from "@gm/isomorphic-domain";
+import {foreach} from "@so/ui";
 
-module.exports = (html, state: IFreeState, events: FreeActionsCreator) => html`
-<div spaces>
-    ${state.Spaces ? state.Spaces.map(space => wire()`
-    
-  <button mat-button mat-mini-fab
-          [color]="(freeStore.CurrentMapSpace$ | async)?.Name == space ? 'accent' : ''"
-          onclick="${_ => events.ChangeSpace(space)}">
-    ${space.split('_').pop()}
-  </button>
-    `) : ''}
-</div>
 
-<!--<div templates layout vertical center-center>-->
-  <!--<button *ngFor="let t of Templates"-->
-          <!--mat-button mat-mini-fab-->
-          <!--[color]="(freeStore.CurrentMapSettings$ | async)?.template == t.template ? 'accent' : ''"-->
-          <!--(click)="freeStore.Actions.ChangeMapSettings({template: t.template})">-->
-    <!--{{t.label}}-->
-  <!--</button>-->
-<!--</div>-->
-<!--<div levels layout vertical center-center>-->
-  <!--<button *ngFor="let level of State?.Levels"-->
-          <!--mat-button mat-mini-fab-->
-          <!--[color]="compareLevels((freeStore.CurrentLevel$ | async),level) ? 'accent' : ''"-->
-          <!--(click)="freeStore.Actions.ChangeMapSettings({levelType: level.Type, levelValue: level.Value})">-->
-    <!--{{level | level}}-->
-  <!--</button>-->
-<!--</div>-->
-<!--<div timeline>-->
-  <!--<gm-timeline [date]="(freeStore.CurrentMapSettings$ | async)?.obsTime"-->
-               <!--[prediction]="(freeStore.CurrentMapSettings$ | async)?.pTime"-->
-               <!--(prediction)="freeStore.Actions.ChangeMapSettings({pTime: $event})"></gm-timeline>-->
-<!--</div>-->
+module.exports = (html, state: IFreeSettingsSpace, events: FreeActionsCreator) => {
 
-`;
+    return html`
+        <div spaces>
+            ${foreach(state.Spaces, spaceRender)}
+        </div>
+        <div templates layout vertical center-center>
+            ${foreach(state.Templates, templateRender)}
+        </div>
+        <div levels layout vertical center-center>
+            ${foreach(state.Levels, levelRender)}
+        </div>
+        <div timeline style="background: #FFF">
+            <date-range ptime="${state.Prediction/60}"
+                        onchange-ptime="${e => events.ChangeMapSettings({pTime: e.value*60})}"
+                        onchange-obstime="${e => events.ChangeMapSettings({obsTime: e.value})}"/>
+        </div>
+    `;
+
+    function spaceRender(space) {
+        return wire()`
+            <button disabled="${state.current.space.Name == space}"
+                    onclick="${_ => events.ChangeSpace(space)}">
+                ${space.split('_').pop()}
+            </button>
+            `;
+    }
+
+    function levelRender(level) {
+        return wire()`
+            <button disabled="${Level.Compare(state.current.level, level)}"
+                    onclick="${_ => events.ChangeMapSettings({levelType: level.Type, levelValue: level.Value})}">
+                ${Level.ToString(level)}
+            </button>
+            `;
+    }
+
+    function templateRender(template) {
+        return wire()`
+            <button disabled="${state.current.template == template.template}"
+                    onClick="${_ => events.ChangeMapSettings({template: template.template})}">
+                ${template.label}
+            </button>
+        `;
+    }
+};

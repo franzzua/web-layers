@@ -1,9 +1,10 @@
 import {Component, HyperComponent} from "@so/ui";
-import {FreeStore} from "../../../app/free/free.store";
+import {FreeStore} from "../../../app/stores/free/free.store";
 import {Domain} from "@gm/isomorphic-domain";
-import {SlideStore} from "../../../app/slide/slide.store";
+import {SlideStore} from "../../../app/stores/slide/slide.store";
 import {Injectable} from "@so/di";
-import {of} from "rxjs";
+import {map, of, tap} from "rx";
+import {IRouteActions, RouterStore} from "../../../app/stores/router/router.store";
 
 @Injectable({
     deps: [Domain, FreeStore, SlideStore],
@@ -14,17 +15,24 @@ import {of} from "rxjs";
     template: require('./free-layout.tsx'),
     style: require('./free-layout.less')
 })
-export class FreeLayout extends HyperComponent {
+export class FreeLayout extends HyperComponent<any, IRouteActions> {
     constructor(private domain: Domain,
-                private freeStore: FreeStore,
-                private slideStore: SlideStore) {
+                private slideStore: SlideStore,
+                private routerStore: RouterStore) {
         super();
         domain.Actions.Slides.LoadSlide(24);
         slideStore.Actions.LoadSlide(24);
     }
 
-    public State$ = of({
-        SlideId: 24
-    })
+    public State$ = this.routerStore.State$.pipe(
+        map(route => ({
+            route,
+            SlideId: 24
+        }))
+    );
+
+    public Actions$ = this.Events$.pipe(
+        tap(action => this.routerStore.Actions[action.type](...action.args))
+    )
 
 }

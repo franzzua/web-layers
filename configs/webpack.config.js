@@ -17,7 +17,7 @@ module.exports = env => ({
             },
             {
                 test: /\.less/,
-                loader: ['./framework/style-loader', 'less-loader'],
+                loader: ['css-loader', 'less-loader'],
             },
             {
                 test: /\.jsonx$/,
@@ -39,7 +39,7 @@ module.exports = env => ({
         mainFields: ['main', 'module', 'main'],
         alias: {
             // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js'),
-            // 'rxjs': require('path').join(__dirname, '../node_modules/rxjs'),
+            'rx': require('path').join(__dirname, '../rx.ts'),
             '@so/di': 'A:/so/di',
             '@so/ui': 'A:/so/ui',
             // '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',

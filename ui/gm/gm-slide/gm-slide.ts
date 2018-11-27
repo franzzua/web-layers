@@ -2,6 +2,8 @@ import {Component, HyperComponent} from "@so/ui";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
 import {Domain, ISlideState} from "@gm/isomorphic-domain";
 import {distinctUntilChanged, map, tap} from "rxjs/operators";
+import {filter} from "rx";
+import {Fn} from "@gm/isomorphic-core";
 
 @Component({
     name: 'gm-slide',
@@ -16,6 +18,7 @@ export class GmSlide extends HyperComponent<IGmSlideState> {
 
     private Id$ = this.Attributes$.pipe(
         map(({id}) => id),
+        filter(Fn.Ib),
         distinctUntilChanged()
     );
 

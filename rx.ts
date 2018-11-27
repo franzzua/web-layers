@@ -12,3 +12,4 @@ export {scan} from "rxjs/internal/operators/scan";
 export {tap} from "rxjs/internal/operators/tap";
 export {NEVER} from "rxjs/internal/observable/never";
 export {of} from "rxjs/internal/observable/of";
+export {from} from "rxjs/internal/observable/from";

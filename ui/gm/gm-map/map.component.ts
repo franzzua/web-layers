@@ -1,7 +1,7 @@
 import {Component, HyperComponent} from "@so/ui";
 import {distinctUntilChanged, map, switchMap, tap} from "rxjs/operators";
-import {SlideStore} from "../../../app/slide/slide.store";
-import {filter} from "../../../rx";
+import {SlideStore} from "../../../app/stores/slide/slide.store";
+import {filter} from "rx";
 import {compareArrays, IGmSlideState} from "../gm-slide/gm-slide";
 
 @Component({

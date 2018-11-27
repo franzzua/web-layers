@@ -1,35 +1,22 @@
+import {Container} from "@so/di";
 import {RootStore} from "store-rxjs";
 import {AppRootStore} from "../framework/app-root-store";
-import {FreeStore} from "./free/free.store";
-import {AppStore} from "./store/app.store";
-import {SlideStore} from "./slide/slide.store";
-import {FreeEpic} from "./free/free.epic";
+import {FreeStore} from "./stores/free/free.store";
+import {AppStore} from "./stores/app/app.store";
+import {SlideStore} from "./stores/slide/slide.store";
+import {FreeEpic} from "./stores/free/free.epic";
 import {Application} from "./application";
-import {Container} from "@so/di";
-import {FreeLayout} from "../ui/gm/free-layout/free-layout";
-import {FreeSettings} from "../ui/gm/free-settings/free-settings";
 import {Domain, DomainInjector} from "@gm/isomorphic-domain";
-import {DomainStore} from "./slide/domain.store";
-import {SlideEpic} from "./slide/slide.epic";
+import {DomainStore} from "./stores/slide/domain.store";
+import {SlideEpic} from "./stores/slide/slide.epic";
 import {IRequestService, Logger} from "@gm/isomorphic-core";
 import {FetchRequestService} from "../framework/fetchRequestService";
-import {GmSlide} from "../ui/gm/gm-slide/gm-slide";
-import {AppRoot} from "../ui/root/app-root.component";
-import {MapComponent} from "../ui/gm/gm-map/map.component";
-import {LayerComponent} from "../ui/gm/gm-layer/layer.component";
-import {init} from "@so/ui";
+import {RouterStore} from "./stores/router/router.store";
+import {EmptyLogger} from "./services/empty.logger";
 
-export class EmptyLogger extends Logger {
-    send() {
-
-    }
-}
-
-export const AppContainer = new Container();
-
-AppContainer.provide([
+export const AppProviders = [
+    {provide: RouterStore},
     {provide: RootStore, useClass: AppRootStore, deps: []},
-    ...DomainInjector.websocket('http://localhost/api'),
     {provide: Logger, useClass: EmptyLogger, deps: []},
     {provide: Application, useClass: Application, deps: [RootStore, Container]},
     {provide: FreeStore, deps: [AppStore, SlideStore, FreeEpic]},
@@ -38,13 +25,16 @@ AppContainer.provide([
     {provide: SlideEpic, deps: [Domain]},
     {provide: DomainStore, deps: [RootStore, Domain]},
     {provide: AppStore, deps: [RootStore]},
-    {provide: FreeLayout, multiple: true, deps: [Domain, FreeStore, SlideStore]},
-    {provide: FreeSettings, multiple: true, deps: [FreeStore]},
-    {provide: GmSlide, multiple: true, deps: [Domain]},
-    {provide: MapComponent, multiple: true, deps: [SlideStore]},
-    {provide: LayerComponent, multiple: true, deps: [SlideStore]},
-    {provide: AppRoot, multiple: true, deps: []},
-    {provide: IRequestService, useClass: FetchRequestService, deps: []}
+    {provide: IRequestService, useClass: FetchRequestService, deps: []},
+];
+
+
+export const AppContainer = new Container();
+
+AppContainer.provide([
+    ...DomainInjector.simple('http://localhost/api'),
+    // ...DomainInjector.websocket('http://localhost/api', 'ws://iis-dev-ost/gm/ws'),
+    ...AppProviders
 ]);
 
 

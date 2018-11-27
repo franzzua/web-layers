@@ -1,9 +1,8 @@
 import {ObservableStore, RootStore} from 'store-rxjs';
-import {AppRootStore} from "../../framework/app-root-store";
 import {AppActionsCreator} from "./app-actions.creator";
 import {Injectable} from "@so/di";
-import {filter, map} from "../../rx";
 import {AppReducer} from "./app.reducer";
+import {filter} from "rx";
 
 @Injectable()
 export class AppStore extends ObservableStore<any> {
@@ -15,7 +14,7 @@ export class AppStore extends ObservableStore<any> {
 
     public State$ = this.asObservable().pipe(
         filter(x => !!x),
-    )
+    );
 
     public Init() {
         super.Init({active: false, items: [1, 2, 3]})
