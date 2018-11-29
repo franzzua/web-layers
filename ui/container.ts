@@ -5,14 +5,14 @@ import {AppRoot} from "./root/app-root.component";
 import {MapComponent} from "./gm/gm-map/map.component";
 import {LayerComponent} from "./gm/gm-layer/layer.component";
 import {SimpleElement} from "./simple-element/simple-element";
-import {Domain} from "@gm/isomorphic-domain";
+import {Domain} from "../app/domain";
 import {SlideStore} from "../app/stores/slide/slide.store";
 import {FreeStore} from "../app/stores/free/free.store";
-import {RouterStore} from "../app/stores/router/router.store";
+import {Router} from "../app/router";
 
 export const UIProviders = [
     {provide: SimpleElement, multiple: true, deps: [Domain]},
-    {provide: FreeLayout, multiple: true, deps: [Domain, SlideStore, RouterStore]},
+    {provide: FreeLayout, multiple: true, deps: [Domain, SlideStore, Router]},
     {provide: FreeSettings, multiple: true, deps: [FreeStore]},
     {provide: GmSlide, multiple: true, deps: [Domain]},
     {provide: MapComponent, multiple: true, deps: [SlideStore]},

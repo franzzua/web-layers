@@ -1,10 +1,16 @@
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const {TsConfigPathsPlugin} = require('awesome-typescript-loader');
 module.exports = env => ({
-    entry: './entry/index.ts',
+    entry: {
+        main: './entry/index.ts',
+        worker: './worker/worker.ts',
+        sw: './entry/service-worker.ts',
+    },
     output: {
-        path: require('path').join(__dirname, '../dist')
+        path: require('path').join(__dirname, '../dist'),
+        publicPath: "/wl"
     },
     devtool: env.prod ? false : 'source-map',
     mode: env.prod ? 'production' : 'development',
@@ -18,6 +24,10 @@ module.exports = env => ({
             {
                 test: /\.less/,
                 loader: ['css-loader', 'less-loader'],
+            },
+            {
+                test: /\.sass/,
+                loader: ['css-loader', 'sass-loader'],
             },
             {
                 test: /\.jsonx$/,
@@ -40,20 +50,25 @@ module.exports = env => ({
         alias: {
             // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js'),
             'rx': require('path').join(__dirname, '../rx.ts'),
-            '@so/di': 'A:/so/di',
-            '@so/ui': 'A:/so/ui',
+            // '@so/di': 'A:/so/di',
+            // '@so/ui': 'A:/so/ui',
+            // '@so/utils': 'A:/so/utils/dist/main.js',
             // '@gm/isomorphic-domain': 'A:/web/isomorphic/domain/dist/main.js',
-            // '@gm/isomorphic-core': 'A:/web/isomorphic/core/dist/main.js'
+            // '@gm/isomorphic-core': 'A:/web/isomorphic/core'
         }
     },
     externals: [],
     plugins: [
         new HtmlWebpackPlugin({
-            template: './entry/index.html'
+            template: './entry/index.html',
+            chunks: ['main'],
         }),
         new TsConfigPathsPlugin({configFile: "./configs/tsconfig.json"}),
-        // new BundleAnalyzerPlugin({
-        //     analyzerPort: 9995
-        // })
+        new BundleAnalyzerPlugin({
+            analyzerPort: 9995
+        }),
+        new CopyWebpackPlugin([
+            'assets/'
+        ])
     ]
 });

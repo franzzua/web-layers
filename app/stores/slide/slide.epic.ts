@@ -5,7 +5,7 @@ import {Action, AnyAction} from 'redux';
 import {SlideStore} from './slide.store';
 import {Domain, ISlideState as SlideState} from '@gm/isomorphic-domain';
 import {Observable} from "rxjs";
-import {Fn} from "@gm/isomorphic-core";
+import {Fn} from "@so/utils";
 import {Injectable} from "@so/di";
 import {combineEpics, Epic} from "store-rxjs";
 

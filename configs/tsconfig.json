@@ -22,13 +22,16 @@
 //      ],
       "rx": [
         "./rx.ts"
-      ],
-      "@so/di": [
-        "A:/so/di"
-      ],
-      "@so/ui": [
-        "A:/so/ui"
       ]
+//      "@so/di": [
+//        "A:/so/di"
+//      ],
+//      "@so/ui": [
+//        "A:/so/ui"
+//      ],
+//      "@so/utils": [
+//        "A:/so/utils"
+//      ]
       //      "free-rxjs": ["../free-rxjs/dist/main"]
     }
   }

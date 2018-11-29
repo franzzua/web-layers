@@ -4,8 +4,8 @@ import {IFreeState} from "../../../app/stores/free/free.state";
 import {FreeActionsCreator} from "../../../app/stores/free/free-actions-creator.service";
 import {map} from "rxjs/operators";
 import {combineLatest, tap} from "rx";
-import {ISpace} from "@gm/isomorphic-core";
 import {ILevel} from "@gm/isomorphic-domain";
+import {ISpace} from "@gm/isomorphic-core";
 
 @Component({
     name: 'gm-free-settings',

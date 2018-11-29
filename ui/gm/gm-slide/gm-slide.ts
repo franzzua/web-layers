@@ -1,9 +1,9 @@
 import {Component, HyperComponent} from "@so/ui";
 import {combineLatest} from "rxjs/internal/observable/combineLatest";
-import {Domain, ISlideState} from "@gm/isomorphic-domain";
-import {distinctUntilChanged, map, tap} from "rxjs/operators";
+import {Domain} from "@gm/isomorphic-domain";
+import {distinctUntilChanged, map} from "rxjs/operators";
 import {filter} from "rx";
-import {Fn} from "@gm/isomorphic-core";
+import {Fn} from "@so/utils";
 
 @Component({
     name: 'gm-slide',

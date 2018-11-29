@@ -1,4 +1,4 @@
-import {Moment} from "@gm/isomorphic-core";
+import {Moment} from "@so/utils";
 
 export interface IFreeState {
     ObsTime: Moment;

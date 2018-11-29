@@ -1,0 +1,15 @@
+{
+  "short_name": "GM",
+  "name": "Gismeteo Web",
+  "icons": [
+    {
+      "src": "/wl/gm.jpg",
+      "type": "image/jpeg",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/wl/home",
+  "background_color": "#3367D6",
+  "display": "standalone",
+  "theme_color": "#3367D6"
+}

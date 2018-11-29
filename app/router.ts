@@ -3,9 +3,9 @@ import browserPlugin from 'router5/plugins/browser'
 import {from, Observable, startWith, tap} from "rx";
 
 const routes = [
-    {name: 'home', path: '/'},
-    {name: 'free', path: '/free'},
-    {name: 'profile', path: '/profile'}
+    {name: 'home', path: '/wl/'},
+    {name: 'free', path: '/wl/free'},
+    {name: 'profile', path: '/wl/profile'}
 ];
 
 const router = createRouter(routes, {
@@ -14,7 +14,7 @@ const router = createRouter(routes, {
 
 router.start();
 
-export class RouterStore {
+export class Router {
 
     public State$ = new Observable(subscr => {
         router.subscribe(change => subscr.next(change.route))

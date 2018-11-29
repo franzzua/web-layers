@@ -5,7 +5,7 @@ import {SlideActions} from './slide.actions';
 import {SlideReducer} from './slide.reducer';
 import {Observable, combineLatest} from 'rxjs';
 import {Domain, IMapState, ISlideState, ILayer} from "@gm/isomorphic-domain";
-import {Fn} from "@gm/isomorphic-core";
+import {Fn} from "@so/utils";
 import {DomainStore} from "./domain.store";
 import {ObservableStore, RootStore} from "store-rxjs";
 import {Injectable} from "@so/di";

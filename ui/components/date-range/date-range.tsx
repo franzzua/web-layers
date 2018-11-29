@@ -1,5 +1,5 @@
 import {wire} from "hyperhtml";
-import {utcToday} from "@gm/isomorphic-core";
+import {utcToday} from "@so/utils";
 import {IEvents, IState} from "./date-range";
 import {Moment} from "moment";
 

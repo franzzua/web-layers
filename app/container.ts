@@ -6,16 +6,19 @@ import {AppStore} from "./stores/app/app.store";
 import {SlideStore} from "./stores/slide/slide.store";
 import {FreeEpic} from "./stores/free/free.epic";
 import {Application} from "./application";
-import {Domain, DomainInjector} from "@gm/isomorphic-domain";
 import {DomainStore} from "./stores/slide/domain.store";
 import {SlideEpic} from "./stores/slide/slide.epic";
-import {IRequestService, Logger} from "@gm/isomorphic-core";
-import {FetchRequestService} from "../framework/fetchRequestService";
-import {RouterStore} from "./stores/router/router.store";
+// import {IRequestService, Logger} from "@so/utils";
+// import {FetchRequestService} from "../framework/fetchRequestService";
+import {Router} from "./router";
+// import {EmptyLogger} from "./services/empty.logger";
+import {Logger} from "@gm/isomorphic-core";
 import {EmptyLogger} from "./services/empty.logger";
+import {Domain, DomainProviders} from "./domain";
+
 
 export const AppProviders = [
-    {provide: RouterStore},
+    {provide: Router},
     {provide: RootStore, useClass: AppRootStore, deps: []},
     {provide: Logger, useClass: EmptyLogger, deps: []},
     {provide: Application, useClass: Application, deps: [RootStore, Container]},
@@ -25,15 +28,16 @@ export const AppProviders = [
     {provide: SlideEpic, deps: [Domain]},
     {provide: DomainStore, deps: [RootStore, Domain]},
     {provide: AppStore, deps: [RootStore]},
-    {provide: IRequestService, useClass: FetchRequestService, deps: []},
+    // {provide: IRequestService, useClass: FetchRequestService, deps: []},
 ];
 
 
 export const AppContainer = new Container();
 
 AppContainer.provide([
-    ...DomainInjector.simple('http://localhost/api'),
-    // ...DomainInjector.websocket('http://localhost/api', 'ws://iis-dev-ost/gm/ws'),
+    // ...DomainInjector.simple('http://localhost/api'),
+    // ...WebsocketDomainProviders('ws://iis-dev-ost.mapmak.dom/gm/ws'),
+    ...DomainProviders,
     ...AppProviders
 ]);
 

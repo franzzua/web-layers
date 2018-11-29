@@ -4,7 +4,7 @@ import {Domain} from "@gm/isomorphic-domain";
 import {SlideStore} from "../../../app/stores/slide/slide.store";
 import {Injectable} from "@so/di";
 import {map, of, tap} from "rx";
-import {IRouteActions, RouterStore} from "../../../app/stores/router/router.store";
+import {IRouteActions, Router} from "../../../app/router";
 
 @Injectable({
     deps: [Domain, FreeStore, SlideStore],
@@ -18,7 +18,7 @@ import {IRouteActions, RouterStore} from "../../../app/stores/router/router.stor
 export class FreeLayout extends HyperComponent<any, IRouteActions> {
     constructor(private domain: Domain,
                 private slideStore: SlideStore,
-                private routerStore: RouterStore) {
+                private routerStore: Router) {
         super();
         domain.Actions.Slides.LoadSlide(24);
         slideStore.Actions.LoadSlide(24);

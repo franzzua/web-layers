@@ -1,6 +1,6 @@
 import {IFreeState} from "./free.state";
 import {AppStore} from "../app/app.store";
-import {utcToday} from "@gm/isomorphic-core";
+import {utcToday} from "@so/utils";
 import {Observable} from "rxjs";
 import {FreeActionsCreator} from "./free-actions-creator.service";
 import {FreeReducer} from "./free.reducer";

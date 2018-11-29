@@ -2,7 +2,7 @@ import {ValueEvent} from "@so/ui";
 import {HyperComponent, Component} from "@so/ui";
 import {combineLatest, filter, map, merge, startWith} from "rx";
 import {Injectable} from "@so/di";
-import {utc, utcToday} from "@gm/isomorphic-core";
+import {utc, utcToday} from "@so/utils";
 import {debounceTime, distinctUntilChanged} from "rxjs/operators";
 
 @Injectable()
