@@ -1,6 +1,6 @@
 {
   "name": "@gm/gismeteoweb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,10 @@
     "build:prod": "webpack --config ./configs/webpack.config.js --watch --env.prod",
     "serve": "autoreload-server -d ./dist/ -p 3000 --default-pages index.html"
   },
+  "files": [
+    "dist",
+    "web.config"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -33,9 +37,7 @@
     "typescript": "^3.1.6",
     "webpack": "^4.26.1",
     "webpack-bundle-analyzer": "^3.0.3",
-    "webpack-cli": "^3.1.2"
-  },
-  "dependencies": {
+    "webpack-cli": "^3.1.2",
     "@gm/isomorphic-core": "^4.2.72",
     "@gm/isomorphic-domain": "^4.2.105",
     "@gm/isomorphic-render": "^4.2.19",

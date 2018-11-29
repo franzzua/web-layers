@@ -6,7 +6,7 @@ import {IRequestService} from "@gm/isomorphic-core";
 import {FetchRequestService} from "../framework/fetchRequestService";
 
 
-const WsDomainProviders: Provider[] = WebsocketDomainProviders('ws://localhost/gm/ws');
+const WsDomainProviders: Provider[] = WebsocketDomainProviders(`ws://${location.hostname}/gm/ws`);
 // const WwDomainProviders: Provider[] = [
 //     ...WebworkerDomainProviders('./worker.js'),
 //     {provide: IRequestService, useClass: FetchRequestService, deps: []}
