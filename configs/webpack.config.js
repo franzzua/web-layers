@@ -2,6 +2,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const {TsConfigPathsPlugin} = require('awesome-typescript-loader');
+const join = require('path').join;
+const webpack = require('webpack');
+
 module.exports = env => ({
     entry: {
         main: './entry/index.ts',
@@ -9,7 +12,7 @@ module.exports = env => ({
         sw: './entry/service-worker.ts',
     },
     output: {
-        path: require('path').join(__dirname, '../dist'),
+        path: join(__dirname, '../dist'),
         publicPath: "/wl"
     },
     devtool: env.prod ? false : 'source-map',
@@ -49,7 +52,7 @@ module.exports = env => ({
         mainFields: ['main', 'module', 'main'],
         alias: {
             // 'store-rxjs': require('path').join(__dirname, '../../store-rxjs/dist/main.js'),
-            'rx': require('path').join(__dirname, '../rx.ts'),
+            'rx': join(__dirname, '../rx.ts'),
             // '@so/di': 'A:/so/di',
             // '@so/ui': 'A:/so/ui',
             // '@so/utils': 'A:/so/utils/dist/main.js',
@@ -64,11 +67,19 @@ module.exports = env => ({
             chunks: ['main'],
         }),
         new TsConfigPathsPlugin({configFile: "./configs/tsconfig.json"}),
-        new BundleAnalyzerPlugin({
-            analyzerPort: 9995
-        }),
+        // new BundleAnalyzerPlugin({
+        //     analyzerPort: 9995
+        // }),
         new CopyWebpackPlugin([
             'assets/'
-        ])
-    ]
+        ]),
+        new webpack.DefinePlugin({
+            Env: {build: +new Date()}
+        })
+    ],
+    devServer: env.prod ? {} : {
+        contentBase: join(__dirname, '../dist'),
+        port: 3000,
+        historyApiFallback: true
+    }
 });

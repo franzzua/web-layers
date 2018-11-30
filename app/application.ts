@@ -1,7 +1,7 @@
 import {RootStore} from "store-rxjs";
 import {Container} from "@so/di";
 import {RegisterUI} from "../ui";
-// import './service-worker';
+import './service-worker';
 
 export class Application {
     constructor(private root: RootStore,

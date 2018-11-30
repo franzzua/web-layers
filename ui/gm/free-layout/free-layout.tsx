@@ -1,14 +1,14 @@
 import {wire} from "hyperhtml";
-import {IRouteActions} from "../../../app/router";
+import {IFreeActions} from "./free-layout";
 
-module.exports = (html, state, events: IRouteActions) => {
+module.exports = (html, state, events: IFreeActions) => {
 
 
     const routeViews = {
         free: () => wire()`
-<div layout fit vertical>
-  <gm-slide id="${state.SlideId}" layout fit></gm-slide>
-  <div layout fit class="controls">
+<div class="is-overlay is-clipped">
+  <gm-slide id="${state.SlideId}" class="is-overlay"></gm-slide>
+  <div class="controls is-overlay">
     <gm-free-settings state="freeStore.State$"></gm-free-settings>
   </div>
 </div>
@@ -22,13 +22,10 @@ module.exports = (html, state, events: IRouteActions) => {
     };
 
     return html`
-<header>
+<header  layout horizontal end-justified>
     <nav>
-        <a class="button" href="/" onclick="${e => e.preventDefault() || events.navigate('home')}">Home</a>
-        <a class="button" href="/free" 
-        onclick="${e => e.preventDefault() || events.navigate('free')}">Free</a>
-        <a class="button" href="/profile" 
-        onclick="${e => e.preventDefault() || events.navigate('profile')}">Profile</a>
+        <span class="is-white">${state.date}</span>
+        
     </nav>        
 </header>
 <main>

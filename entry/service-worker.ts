@@ -1,16 +1,19 @@
-const CACHE = 'cache-only-v1';
+declare const Env;
+const CACHE = `cache-only-v${Env.build}`;
 
 // При установке воркера мы должны закешировать часть данных (статику).
 self.addEventListener('install', (event: any) => {
     event.waitUntil(
         caches.open(CACHE).then((cache) => {
             return cache.addAll([
-                '/free',
-                '/main.js',
-                '/worker.js',
-                '/manifest.json',
-                '/robots.txt',
-                '/gm.jpg',
+                '/wl/home',
+                '/wl/free',
+                '/wl/profile',
+                '/wl/main.js',
+                '/wl/worker.js',
+                '/wl/manifest.json',
+                '/wl/robots.txt',
+                '/wl/gm.jpg',
             ]);
         })
     );
@@ -19,6 +22,13 @@ self.addEventListener('install', (event: any) => {
 // При запросе на сервер (событие fetch), используем только данные из кэша.
 self.addEventListener('fetch', (event: any) => {
     event.respondWith(fromCache(event.request).catch(e => fetch(event.request)));
+    caches.open(CACHE).then(function (cache) {
+        return fetch(event.request).then(function (response) {
+            return cache.put(event.request, response.clone()).then(function () {
+                return response;
+            });
+        });
+    });
 });
 
 function fromCache(request) {

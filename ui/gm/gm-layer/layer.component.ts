@@ -1,10 +1,12 @@
 import {Component, HyperComponent} from "@so/ui";
-import {distinctUntilChanged, first, map, mergeMap, switchMap, tap, withLatestFrom} from "rxjs/operators";
+import {delay, distinctUntilChanged, first, map, mergeMap, switchMap, tap, withLatestFrom} from "rxjs/operators";
 import {SlideStore} from "../../../app/stores/slide/slide.store";
-import {filter} from "rx";
+import {filter, startWith} from "rx";
 import {CanvasContext, IContext, Renderer} from "@gm/isomorphic-render";
 import {combineLatest, Observable} from "rxjs";
 import {ILayerState, IMapState} from "@gm/isomorphic-domain";
+import {utc} from "@so/utils";
+import {animationFrame} from "rxjs/internal/scheduler/animationFrame";
 
 @Component({
     name: 'gm-layer',
@@ -22,7 +24,8 @@ export class LayerComponent extends HyperComponent {
         first(),
         map(canvas => {
             const rect = canvas.getBoundingClientRect();
-            return new CanvasContext(canvas.getContext('2d'), rect.width || 1920, rect.height || 1080);
+            console.log(rect);
+            return new CanvasContext(canvas.getContext('2d'), rect.width || window.innerWidth, rect.height || window.innerHeight);
         }),
     );
 
@@ -41,12 +44,19 @@ export class LayerComponent extends HyperComponent {
         map(([map, context]) => new Renderer(map.Space, context))
     );
 
-    private subscription = combineLatest(this.Renderer$, this.Layer$).pipe(
+    private Rendering$ = combineLatest(this.Renderer$, this.Layer$).pipe(
         distinctUntilChanged(null, ([renderer, layer]) => layer.Version),
+        delay(0, animationFrame),
         // tap(([renderer, layer]) => console.time(`render.${layer.Id}.${layer.Version}`)),
-        tap(([renderer, layer]) => renderer.Render(layer.Data, true)),
+        tap(([renderer, layer]) => {
+            renderer.Render(layer.Data, true);
+        }),
+        map(_ => utc())
         // tap(([renderer, layer]) => console.timeEnd(`render.${layer.Id}.${layer.Version}`)),
-    ).subscribe()
+    );
 
-
+    public State$ = this.Rendering$.pipe(
+        startWith(utc()),
+        map(utc => utc.toISOString()),
+    )
 }
